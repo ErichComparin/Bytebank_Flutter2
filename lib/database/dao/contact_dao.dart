@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 import 'package:al2_bytebank/database/app_database.dart';
-import 'package:al2_bytebank/models/Contact.dart';
+import 'package:al2_bytebank/models/contact.dart';
 
 class ContactDao {
   static const String tableSql = 'CREATE TABLE $_tableName('

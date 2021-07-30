@@ -23,7 +23,7 @@
 
 ## 💻 Sobre o projeto
 
-Projeto simples criado com Flutter utilizando SQLite.
+Projeto simples criado com Flutter utilizando os pacotes Sqflite (persistência com SQLite) e Http (busca de dados da internet).
 
 ---
 
@@ -33,6 +33,7 @@ As seguintes tecnologias/ferramentas foram usadas na construção do projeto:
 
 -   **[Flutter](https://flutter.dev/)**
 -   **[SQLite](https://flutter.dev/docs/cookbook/persistence/sqlite)**
+-   **[HTTP](https://flutter.dev/docs/cookbook/networking/fetch-data)**
 
 ---
 
