@@ -24,7 +24,7 @@ class TransactionWebclient {
         .toList();
   }
 
-  Future<Transaction> save(Transaction transaction) async {
+  Future<Transaction> save(Transaction transaction, String password) async {
     final String jsonTransaction = jsonEncode(transaction.toJson());
     final Response response = await client.post(
       Uri.http(
@@ -33,10 +33,19 @@ class TransactionWebclient {
       ),
       headers: {
         'Content-type': 'application/json',
-        'password': '1000',
+        'password': password,
       },
       body: jsonTransaction,
     );
+
+    if (response.statusCode == 400){
+      throw Exception('There was an error submitting transaction');
+    }
+
+    if(response.statusCode == 401){
+      throw Exception('Authentication failed');
+    }
+
     return Transaction.fromJson(jsonDecode(response.body));
   }
 }
