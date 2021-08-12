@@ -12,9 +12,6 @@ class TransactionWebclient {
             baseUrl,
             basePath,
           ),
-        )
-        .timeout(
-          Duration(seconds: 5),
         );
     final List<dynamic> jsonTransactions = jsonDecode(response.body);
     return jsonTransactions
@@ -24,8 +21,11 @@ class TransactionWebclient {
         .toList();
   }
 
-  Future<Transaction> save(Transaction transaction, String password) async {
+  Future<Transaction?> save(Transaction transaction, String password) async {
     final String jsonTransaction = jsonEncode(transaction.toJson());
+
+    await Future.delayed(Duration(seconds: 2));
+
     final Response response = await client.post(
       Uri.http(
         baseUrl,
@@ -38,14 +38,24 @@ class TransactionWebclient {
       body: jsonTransaction,
     );
 
-    if (response.statusCode == 400){
-      throw Exception('There was an error submitting transaction');
+    if (response.statusCode == 200) {
+      return Transaction.fromJson(jsonDecode(response.body));
     }
 
-    if(response.statusCode == 401){
-      throw Exception('Authentication failed');
-    }
-
-    return Transaction.fromJson(jsonDecode(response.body));
+    throw HttpException(_getMessage(response.statusCode));
   }
+
+  String? _getMessage(int statusCode) => _statusCodeResponses[statusCode];
+
+  static final Map<int, String> _statusCodeResponses = {
+    400: 'There was an error submitting transaction',
+    401: 'Authentication failed',
+    500: 'Transaction already exists',
+  };
+}
+
+class HttpException implements Exception {
+  final String? message;
+
+  HttpException(this.message);
 }
